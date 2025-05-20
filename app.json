@@ -2,7 +2,7 @@
   "expo": {
     "name": "valsoft",
     "slug": "valsoft",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -16,7 +16,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "CALL_PHONE"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -26,10 +29,18 @@
     "plugins": [
       "expo-router",
       "expo-font",
+      "expo-secure-store",
       "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6503bc8d-bf77-42a4-acb4-8cb5593213b8"
+      }
+    },
+    "owner": "rj61407"
   }
 }
