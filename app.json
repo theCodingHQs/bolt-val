@@ -8,11 +8,13 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "LSApplicationQueriesSchemes": ["tel"]
-      }
+      "supportsTablet": true
     },
     "android": {
       "package": "com.hosting11115.valsoft",
@@ -21,7 +23,7 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.CALL_PHONE"
+        "CALL_PHONE"
       ]
     },
     "web": {
@@ -41,9 +43,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "602eac60-009b-4ff8-b0ce-43160c93f68e"
+        "projectId": "6503bc8d-bf77-42a4-acb4-8cb5593213b8"
       }
     },
-    "owner": "hosting11115"
+    "owner": "rj61407"
   }
 }
