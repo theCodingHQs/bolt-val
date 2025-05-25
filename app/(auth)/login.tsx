@@ -46,7 +46,9 @@ async function loginUser({
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
 
   const mutation = useMutation({
     mutationFn: loginUser,
@@ -54,9 +56,12 @@ export default function Login() {
       const data = res.data;
       await storeItem('token', res.headers['authorization']);
       await storeItem('user', JSON.stringify(data));
-      await storeItem('isAutoReference', JSON.stringify(data.is_auto_reference));
+      await storeItem(
+        'isAutoReference',
+        JSON.stringify(data.is_auto_reference)
+      );
 
-      router.replace('/(app)');
+      router.replace('/');
     },
     onError: (error: any) => {
       console.error('Login error', error);

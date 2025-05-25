@@ -31,7 +31,7 @@
     "@lucide/lab": "^0.1.2",
     "@react-native-community/cli": "^18.0.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
-    "@react-navigation/native": "^7.1.9",
+    "@react-navigation/native": "^7.1.6",
     "@tanstack/react-query": "^5.74.3",
     "axios": "^1.8.4",
     "date-fns": "^4.1.0",
