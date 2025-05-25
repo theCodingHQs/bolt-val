@@ -7,8 +7,8 @@ import { useFonts } from 'expo-font';
 import { router, Stack, usePathname } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { DefaultTheme, PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -30,18 +30,16 @@ const queryClient = new QueryClient({
   },
 });
 
-// const isWeb = Platform.OS === 'web';
 queryClient.getQueryCache().subscribe((event) => {
   if (event?.query?.state?.status === 'error') {
     const error = event.query.state.error as any;
-
     if (error?.response?.status === 401 || error?.response?.status === 403) {
       (async () => {
         try {
           if (currentPathname !== '/login') {
             await storage.deleteItem('user');
             await storage.deleteItem('token');
-            await router.replace('/login');
+            router.replace('/login');
           }
         } catch (err) {
           console.error('Error during logout process:', err);
@@ -53,16 +51,31 @@ queryClient.getQueryCache().subscribe((event) => {
 
 export default function RootLayout() {
   useFrameworkReady();
+  const [initialRoute, setInitialRoute] = useState<string | null>(null);
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
   const navigation = useNavigation();
   const route = useRoute();
+  const pathname = usePathname();
 
-  const title = navigation
-    ?.getState()
-    ?.routes.find((r) => r.key === route.key)?.name;
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = await storage.getItem('token');
+        setInitialRoute(token ? '/(app)' : '/(auth)/login');
+      } catch (err) {
+        console.error('Error checking auth:', err);
+        setInitialRoute('/(auth)/login');
+      }
+    };
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    setCurrentPathname(pathname);
+  }, [pathname]);
 
   useEffect(() => {
     if (loaded) {
@@ -70,13 +83,7 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  const pathname = usePathname();
-
-  useEffect(() => {
-    setCurrentPathname(pathname);
-  }, [pathname]);
-
-  if (!loaded) {
+  if (!loaded || !initialRoute) {
     return null;
   }
 
@@ -84,11 +91,11 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <PaperProvider theme={DefaultTheme}>
-          <SafeAreaView
-            style={styles.container}
-            edges={['top', 'left', 'right']}
-          >
-            <Stack screenOptions={{ headerShown: false }} />
+          <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+            <Stack screenOptions={{ headerShown: false }} initialRouteName={initialRoute}>
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(app)" options={{ headerShown: false }} />
+            </Stack>
             <StatusBar style="dark" />
           </SafeAreaView>
           <Toast position="top" swipeable />
