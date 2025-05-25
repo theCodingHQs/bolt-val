@@ -51,15 +51,7 @@ export const accordionColorTrigger = (
 };
 
 export const usePhoneDialer = () => {
-  const dial = async (phoneNumber: string) => {
-    const url = `tel:${phoneNumber}`;
-
-    const supported = await Linking.canOpenURL(url);
-    if (!supported) {
-      Alert.alert('Phone call not supported on this device');
-      return;
-    }
-
+  const checkPermission = async () => {
     if (Platform.OS === 'android') {
       try {
         const granted = await PermissionsAndroid.request(
@@ -71,25 +63,43 @@ export const usePhoneDialer = () => {
             buttonNegative: 'Cancel',
           }
         );
-
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert.alert(
-            'Permission denied',
-            'Cannot make a phone call without permission.'
-          );
-          return;
-        }
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
       } catch (err) {
         console.warn('Permission error:', err);
-        Alert.alert(
-          'Permission error',
-          'Failed to request phone call permission.'
-        );
-        return;
+        return false;
       }
     }
+    return true;
+  };
 
-    await Linking.openURL(url);
+  const dial = async (phoneNumber: string) => {
+    if (!phoneNumber) {
+      Alert.alert('Error', 'Phone number is required');
+      return;
+    }
+
+    const hasPermission = await checkPermission();
+    if (!hasPermission) {
+      Alert.alert(
+        'Permission denied',
+        'Cannot make a phone call without permission.'
+      );
+      return;
+    }
+
+    const url = `tel:${phoneNumber}`;
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (!supported) {
+        Alert.alert('Error', 'Phone calls are not supported on this device');
+        return;
+      }
+
+      await Linking.openURL(url);
+    } catch (err) {
+      console.error('Error making phone call:', err);
+      Alert.alert('Error', 'Failed to make phone call');
+    }
   };
 
   return { dial };
