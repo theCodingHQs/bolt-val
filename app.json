@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "valsoft",
-    "slug": "valsoft",
+    "name": "valsoft-2",
+    "slug": "valsoft-2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,20 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "LSApplicationQueriesSchemes": ["tel"]
-      }
-    },
-    "android": {
-      "package": "com.hosting11115.valsoft",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "permissions": [
-        "android.permission.CALL_PHONE"
-      ]
+      "supportsTablet": true
     },
     "web": {
       "bundler": "metro",
@@ -38,12 +25,18 @@
     "experiments": {
       "typedRoutes": true
     },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#ffffaa"
+      },
+      "package": "com.valsoft.valsoftapp"
+    },
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "602eac60-009b-4ff8-b0ce-43160c93f68e"
+        "projectId": "9f7ec43a-0874-41ea-b956-81a2df64f01a"
       }
-    },
-    "owner": "hosting11115"
+    }
   }
 }

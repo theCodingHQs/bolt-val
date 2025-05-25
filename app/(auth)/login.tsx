@@ -40,23 +40,31 @@ async function loginUser({
   const response = await apiClient.post('login', {
     site_engineer: { email, password },
   });
+
   return response;
 }
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: async (res) => {
       const data = res.data;
       await storeItem('token', res.headers['authorization']);
       await storeItem('user', JSON.stringify(data));
-      await storeItem('isAutoReference', JSON.stringify(data.is_auto_reference));
+      await storeItem(
+        'isAutoReference',
+        JSON.stringify(data.is_auto_reference)
+      );
 
-      router.replace('/(app)');
+      setTimeout(() => {
+        router.replace('/');
+      }, 100);
     },
     onError: (error: any) => {
       console.error('Login error', error);
@@ -87,18 +95,28 @@ export default function Login() {
     <ImageBackground
       source={{
         uri: 'https://wallpaper.forfun.com/fetch/21/21af8682a3ad5631e44f7f4ca9500fe8.jpeg',
+      }} // ⬅️ Use your image path here
+      style={{
+        flex: 1,
+        justifyContent: 'center',
       }}
-      style={styles.background}
-      resizeMode="cover"
+      resizeMode="cover" // or "contain", "stretch", "repeat"
     >
       <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image source={uri} style={styles.logo} />
+        <View
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            // transform: `translateY(${isWeb ? '50%' : '100%'})`,
+          }}
+        >
+          <Image source={uri} style={{}} />
         </View>
         <View style={styles.form}>
-          <View style={styles.inputContainer}>
+          <View>
             <TextInput
-              style={styles.input}
+              style={{ height: 40 }}
               autoFocus
               inputMode="text"
               placeholder="Email"
@@ -110,9 +128,9 @@ export default function Login() {
             />
             {errors.email && <Text style={styles.error}>{errors.email}</Text>}
           </View>
-          <View style={styles.inputContainer}>
+          <View>
             <TextInput
-              style={styles.input}
+              style={{ height: 40 }}
               placeholder="Password"
               value={password}
               onChangeText={setPassword}
@@ -125,7 +143,7 @@ export default function Login() {
           </View>
           <Button
             mode="elevated"
-            style={styles.button}
+            style={{ width: 150, alignSelf: 'center', alignItems: 'center' }}
             loading={mutation.isPending}
             onPress={handleLogin}
           >
@@ -138,24 +156,17 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   container: {
     flex: 1,
     padding: 20,
     justifyContent: 'center',
+    // backgroundColor: '#fffb',
   },
-  logoContainer: {
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 30,
-  },
-  logo: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    textAlign: 'center',
   },
   form: {
     gap: 20,
@@ -163,22 +174,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff4',
     borderRadius: 5,
   },
-  inputContainer: {
-    width: '100%',
-  },
-  input: {
-    height: 40,
-    backgroundColor: '#fff',
-  },
-  button: {
-    width: 150,
-    alignSelf: 'center',
-    alignItems: 'center',
-  },
+
   error: {
     color: '#ff4444',
     fontSize: 14,
-    marginTop: 4,
-    marginLeft: 4,
   },
 });
