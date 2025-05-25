@@ -11,6 +11,13 @@
     "android": "expo run:android",
     "ios": "expo run:ios"
   },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
+  },
   "dependencies": {
     "@eva-design/eva": "^2.2.0",
     "@expo/metro-config": "~0.20.0",
@@ -24,9 +31,8 @@
     "@lucide/lab": "^0.1.2",
     "@react-native-community/cli": "^18.0.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
-    "@react-navigation/native": "^7.0.0",
+    "@react-navigation/native": "^7.1.9",
     "@tanstack/react-query": "^5.74.3",
-    "@ui-kitten/components": "^5.3.1",
     "axios": "^1.8.4",
     "date-fns": "^4.1.0",
     "expo": "^53.0.8",
